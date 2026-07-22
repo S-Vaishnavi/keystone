@@ -7,3 +7,22 @@ node_modules/
 dist/
 .DS_Store
 application-local.yml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Additional secrets
+application-secrets.yml
+*.env
+
+# Docker
+docker-compose.override.yml
