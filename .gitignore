@@ -26,3 +26,4 @@ application-secrets.yml
 
 # Docker
 docker-compose.override.yml
+/.metadata/
