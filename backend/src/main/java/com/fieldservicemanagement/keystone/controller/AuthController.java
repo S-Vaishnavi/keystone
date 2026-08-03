@@ -25,7 +25,10 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate user and return JWT token")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) { return null; }
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse response = authService.login(loginRequest);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/logout")
     @Operation(summary = "Logout the currently authenticated user")
