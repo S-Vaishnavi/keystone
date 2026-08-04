@@ -6,6 +6,9 @@ spring:
   jpa:
     show-sql: false
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration-ms: 86400000
+keystone:
+  jwt:
+    secret: ${JWT_SECRET:ljnkNJ6pd7rbOJ9K9EgLU3+ZIXlxpnzA9kn+6vWbkE4=}
+    expiration-ms: 86400000
+  scheduler:
+    sla-check-cron: "0 */15 * * * *"
