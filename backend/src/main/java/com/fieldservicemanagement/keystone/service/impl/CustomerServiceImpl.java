@@ -27,7 +27,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse create(CustomerCreateRequest request) {
         Customer customer = customerMapper.toEntity(request);
-        Customer saved = customerRepository.save(customer);
+       // Customer saved = customerRepository.save(customer);
+        Customer saved = customerRepository.saveAndFlush(customer);
         return customerMapper.toResponse(saved);
     }
 

@@ -39,7 +39,8 @@ public class SiteServiceImpl implements SiteService {
                 .address(request.getAddress())
                 .build();
 
-        Site saved = siteRepository.save(site);
+       // Site saved = siteRepository.save(site);
+        Site saved = siteRepository.saveAndFlush(site);
         return siteMapper.toResponse(saved);
     }
 

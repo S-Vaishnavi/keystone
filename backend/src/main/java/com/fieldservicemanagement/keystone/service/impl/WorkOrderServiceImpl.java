@@ -67,7 +67,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
                 .site(site)
                 .build();
 
-        WorkOrder saved = workOrderRepository.save(workOrder);
+        //WorkOrder saved = workOrderRepository.save(workOrder);
+        WorkOrder saved = workOrderRepository.saveAndFlush(workOrder);
         return workOrderMapper.toResponse(saved);
     }
 
