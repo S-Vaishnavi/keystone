@@ -15,6 +15,14 @@ public class SlaBreachChecker {
 
     private final SlaService slaService;
 
-    @Scheduled(cron = "${keystone.scheduler.sla-check-cron}")
-    public void checkSlaBreaches() {}
+    @Scheduled(cron = "0 0 * * * *")
+    public void checkSlaBreaches() {
+        log.info("SLA breach scan started");
+        try {
+            slaService.scanForBreaches();
+            log.info("SLA breach scan completed successfully");
+        } catch (Exception e) {
+            log.error("SLA breach scan failed", e);
+        }
+    }
 }
