@@ -3,6 +3,8 @@ package com.fieldservicemanagement.keystone.service;
 import com.fieldservicemanagement.keystone.domain.User;
 import com.fieldservicemanagement.keystone.dto.auth.LoginRequest;
 import com.fieldservicemanagement.keystone.dto.auth.LoginResponse;
+import com.fieldservicemanagement.keystone.dto.auth.RegisterRequest;
+import com.fieldservicemanagement.keystone.dto.auth.RegisterResponse;
 import com.fieldservicemanagement.keystone.exception.ResourceNotFoundException;
 import com.fieldservicemanagement.keystone.repository.UserRepository;
 import com.fieldservicemanagement.keystone.security.JwtService;
@@ -11,7 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.ZoneOffset;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +28,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public LoginResponse login(LoginRequest loginRequest) {
         log.debug("Authentication attempt for email: {}", loginRequest.getEmail());
@@ -46,4 +53,27 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
+    public RegisterResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
+
+        User savedUser = userRepository.save(user);
+
+        return RegisterResponse.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .message("User registered successfully")
+                .createdAt(savedUser.getCreatedAt() != null ? savedUser.getCreatedAt().toInstant(ZoneOffset.UTC) : null)
+                .build();
+    }
 }
