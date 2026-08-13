@@ -1,14 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/keystone_dev
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     show-sql: true
 
 keystone:
   jwt:
-    secret: ${JWT_SECRET:ljnkNJ6pd7rbOJ9K9EgLU3+ZIXlxpnzA9kn+6vWbkE4=}
+    secret: ${JWT_SECRET}
     expiration-ms: 86400000
   scheduler:
     sla-check-cron: "0 */15 * * * *"
