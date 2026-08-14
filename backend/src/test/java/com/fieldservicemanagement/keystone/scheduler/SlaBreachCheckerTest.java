@@ -26,7 +26,7 @@ class SlaBreachCheckerTest {
 
     @Test
     void checkSlaBreaches_shouldInvokeScanForBreaches() {
-        slaBreachChecker.checkSlaBreaches();
+        slaBreachChecker.checkForBreaches();
 
         verify(slaService).scanForBreaches();
     }
@@ -35,7 +35,7 @@ class SlaBreachCheckerTest {
     void checkSlaBreaches_shouldHandleExceptionGracefully() {
         doThrow(new RuntimeException("Database unavailable")).when(slaService).scanForBreaches();
 
-        assertThatCode(() -> slaBreachChecker.checkSlaBreaches())
+        assertThatCode(() -> slaBreachChecker.checkForBreaches())
                 .doesNotThrowAnyException();
 
         verify(slaService).scanForBreaches();

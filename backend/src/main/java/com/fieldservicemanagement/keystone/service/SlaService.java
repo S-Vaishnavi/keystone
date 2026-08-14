@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class SlaService {
 
     private final WorkOrderRepository workOrderRepository;
 
-    public Instant computeDueDate(Priority priority, Instant createdAt) {
+    public LocalDateTime computeDueDate(Priority priority, LocalDateTime createdAt) {
         if (priority == null || createdAt == null) {
             return null;
         }
@@ -36,7 +37,7 @@ public class SlaService {
     }
 
     public List<WorkOrder> scanForBreaches() {
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now();
         List<WorkOrder> activeWorkOrders = workOrderRepository.findAll().stream()
                 .filter(this::isActive)
                 .collect(Collectors.toList());
@@ -51,8 +52,8 @@ public class SlaService {
         return status != null && status != WorkOrderStatus.COMPLETED && status != WorkOrderStatus.CANCELLED;
     }
 
-    private boolean isOverdue(WorkOrder workOrder, Instant now) {
-        Instant dueDate = computeDueDate(workOrder.getPriority(), workOrder.getCreatedAt());
+    private boolean isOverdue(WorkOrder workOrder, LocalDateTime now) {
+        LocalDateTime dueDate = computeDueDate(workOrder.getPriority(), workOrder.getCreatedAt());
         return dueDate != null && now.isAfter(dueDate);
     }
 }
